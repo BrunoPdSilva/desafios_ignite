@@ -6,17 +6,20 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsup src",
-    "test": "pnpm dlx vitest"
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.7.0",
+    "@types/supertest": "^2.0.13",
+    "sqlite3": "^5.1.6",
+    "supertest": "^6.3.3",
     "ts-node": "^10.9.1",
     "tsx": "^3.13.0",
-    "sqlite3": "^5.1.6",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.5"
   },
   "dependencies": {
     "@fastify/cookie": "^9.1.0",

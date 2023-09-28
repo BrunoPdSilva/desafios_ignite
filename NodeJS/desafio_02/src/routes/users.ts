@@ -13,7 +13,7 @@ export async function users(app: FastifyInstance) {
   app.get("/:id", async req => {
     const paramsSchema = z.object({ id: z.string().uuid() })
     const { id } = paramsSchema.parse(req.params)
-    const user = await knex("users").select("*").where("id", id)
+    const user = await knex("users").where("id", id).first()
 
     return { user }
   })
