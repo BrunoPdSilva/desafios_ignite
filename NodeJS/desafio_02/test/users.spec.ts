@@ -8,18 +8,18 @@ describe("Users Route", () => {
   afterAll(async () => await app.close())
 
   beforeEach(() => {
-    execSync("pnpm dlx knex migrate:rollback --all")
-    execSync("pnpm dlx knex migrate:latest")
+    execSync("npx knex migrate:rollback --all")
+    execSync("npx knex migrate:latest")
   })
 
-  it("should be able to register users", async () => {
+  it("1. Should be able to register a user.", async () => {
     await supertest(app.server)
       .post("/users")
       .send({ name: "Bruno Peres", email: "bruno@gmail.com" })
       .expect(201)
   })
 
-  it("should be able to fetch a user", async () => {
+  it("2. Should be able to retrieve a user by ID.", async () => {
     await supertest(app.server)
       .post("/users")
       .send({ name: "Bruno Peres", email: "bruno@gmail.com" })
@@ -37,7 +37,7 @@ describe("Users Route", () => {
     )
   })
 
-  it("should be able to fetch multiple users", async () => {
+  it("3. Should be able to list multiple users.", async () => {
     await supertest(app.server)
       .post("/users")
       .send({ name: "Bruno Peres", email: "bruno@gmail.com" })
@@ -53,7 +53,7 @@ describe("Users Route", () => {
     ])
   })
 
-  it("should be able to delete a user", async () => {
+  it("4. Should be able to delete a user by ID.", async () => {
     await supertest(app.server)
       .post("/users")
       .send({ name: "Bruno Peres", email: "bruno@gmail.com" })

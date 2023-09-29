@@ -65,7 +65,7 @@ export async function users(app: FastifyInstance) {
       res.status(201).send()
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res.status(400).send("Informe name e email corretamente.")
+        return res.status(400).send("Informe nome e email corretamente.")
       }
       res.status(500).send("Ocorreu um erro ao processar a solicitação.")
     }
