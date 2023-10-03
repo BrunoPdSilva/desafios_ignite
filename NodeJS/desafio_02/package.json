@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
     "build": "tsup src",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,7 @@
     "ts-node": "^10.9.1",
     "tsx": "^3.13.0",
     "typescript": "^5.2.2",
+    "vite-tsconfig-paths": "^4.2.1",
     "vitest": "^0.34.5"
   },
   "dependencies": {

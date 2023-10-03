@@ -30,7 +30,7 @@ describe("Meals route", () => {
   })
 
   it("2. Should be able to list meals.", async () => {
-    await supertest(app.server)
+    const createRes = await supertest(app.server)
       .post("/meals")
       .send({
         id: randomUUID(),
@@ -44,7 +44,11 @@ describe("Meals route", () => {
       })
       .expect(201)
 
-    const mealsResponse = await supertest(app.server).get("/meals").expect(200)
+    const cookies = createRes.get("Set-Cookie")
+    const mealsResponse = await supertest(app.server)
+      .get("/meals")
+      .set("Cookie", cookies)
+      .expect(200)
 
     expect(mealsResponse.body.meals).toEqual([
       expect.objectContaining({
@@ -77,12 +81,16 @@ describe("Meals route", () => {
       })
       .expect(201)
 
-    const mealsResponse = await supertest(app.server).get("/meals")
+    const mealsResponse = await supertest(app.server)
+      .get("/meals")
+      .set("Cookie", cookies)
     const { id, consumer_id } = mealsResponse.body.meals[0]
-    const responseByID = await supertest(app.server).get(`/meals/${id}`)
-    const responseByConsumerID = await supertest(app.server).get(
-      `/meals/${consumer_id}`
-    )
+    const responseByID = await supertest(app.server)
+      .get(`/meals/${id}`)
+      .set("Cookie", cookies)
+    const responseByConsumerID = await supertest(app.server)
+      .get(`/meals/${consumer_id}`)
+      .set("Cookie", cookies)
 
     expect(responseByID.body.meal).toEqual(
       expect.objectContaining({
@@ -105,8 +113,8 @@ describe("Meals route", () => {
     )
   })
 
-  it("4. Should be able to delete a meal by ID", async () => {
-    await supertest(app.server)
+  it("4. Should be able to delete a meal by ID.", async () => {
+    const deleteRes = await supertest(app.server)
       .post("/meals")
       .send({
         id: randomUUID(),
@@ -120,9 +128,17 @@ describe("Meals route", () => {
       })
       .expect(201)
 
-    const mealsResponse = await supertest(app.server).get("/meals").expect(200)
+    const cookies = deleteRes.get("Set-Cookie")
+
+    const mealsResponse = await supertest(app.server)
+      .get("/meals")
+      .set("Cookie", cookies)
+      .expect(200)
     const { id } = mealsResponse.body.meals[0]
 
-    await supertest(app.server).delete(`/meals/${id}`).expect(204)
+    await supertest(app.server)
+      .delete(`/meals/${id}`)
+      .set("Cookie", cookies)
+      .expect(204)
   })
 })

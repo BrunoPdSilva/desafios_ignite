@@ -2,6 +2,8 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest"
 import { execSync } from "node:child_process"
 import { app } from "../src/app"
 import supertest from "supertest"
+import { KnexUsersRepository } from "../src/repositories/knex/knex-users-repository"
+import { DeleteUserService } from "../src/services/users/delete-user-service"
 
 describe("Users Route", () => {
   beforeAll(async () => await app.ready())

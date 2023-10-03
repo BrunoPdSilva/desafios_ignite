@@ -2,9 +2,10 @@ import { FastifyInstance } from "fastify"
 import { z } from "zod"
 import { knex } from "../lib/knex"
 import { randomUUID } from "node:crypto"
+import { checkSessionID } from "../middleware/checkSessionID"
 
 export async function meals(app: FastifyInstance) {
-  app.get("/", async (req, res) => {
+  app.get("/debug", { preHandler: checkSessionID }, async (req, res) => {
     try {
       const meals = await knex("meals").select("*")
       return { meals }
@@ -14,7 +15,39 @@ export async function meals(app: FastifyInstance) {
     }
   })
 
-  app.get("/:id", async (req, res) => {
+  app.get("/", { preHandler: checkSessionID }, async (req, res) => {
+    try {
+      const { sessionID, userID } = req.cookies
+
+      let meals = null
+
+      if (userID) {
+        meals = await knex("meals").where(function (this: any) {
+          this.where("consumer_id", userID).orWhere(
+            "consumer_session_id",
+            sessionID
+          )
+        })
+      } else {
+        meals = await knex("meals").where("consumer_session_id", sessionID)
+      }
+
+      if (!meals?.length) {
+        return res
+          .status(404)
+          .send("Não encontramos nenhuma refeição registrada.")
+      }
+
+      return { meals }
+    } catch (error) {
+      console.log(`Error: ${error}`)
+      return res
+        .status(500)
+        .send("Ocorreu um erro ao processar esta solicitação.")
+    }
+  })
+
+  app.get("/:id", { preHandler: checkSessionID }, async (req, res) => {
     try {
       const paramsSchema = z.object({ id: z.string().uuid() })
       const { id } = paramsSchema.parse(req.params)
@@ -74,7 +107,7 @@ export async function meals(app: FastifyInstance) {
     res.status(201).send()
   })
 
-  app.delete("/:id", async (req, res) => {
+  app.delete("/:id", { preHandler: checkSessionID }, async (req, res) => {
     try {
       const paramsSchema = z.object({ id: z.string().uuid() })
       const { id } = paramsSchema.parse(req.params)
