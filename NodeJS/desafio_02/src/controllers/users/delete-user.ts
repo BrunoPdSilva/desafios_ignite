@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify"
 import { KnexUsersRepository } from "@/repositories/knex/knex-users-repository"
-import { UserNotFoundError } from "@/services/users/errors/user-not-found"
 import { DeleteUserService } from "@/services/users/delete-user-service"
+import { UserNotFoundError } from "@/services/errors"
 import { z } from "zod"
 
 export async function deleteUser(req: FastifyRequest, res: FastifyReply) {

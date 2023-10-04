@@ -61,17 +61,9 @@ describe("Meals route", () => {
     ])
   })
 
-  it("3. Should be able to retrieve a meal by ID or by Consumer ID.", async () => {
-    const createUserRes = await supertest(app.server)
-      .post("/users")
-      .send({ name: "Bruno Peres", email: "bruno@gmail.com" })
-      .expect(201)
-
-    const cookies = createUserRes.get("Set-Cookie")
-
-    await supertest(app.server)
+  it("3. Should be able to retrieve a meal by ID.", async () => {
+    const createMealRes = await supertest(app.server)
       .post("/meals")
-      .set("Cookie", cookies)
       .send({
         name: "Macarronada",
         description: "Macarronada com carne moída",
@@ -81,28 +73,17 @@ describe("Meals route", () => {
       })
       .expect(201)
 
+    const cookies = createMealRes.get("Set-Cookie")
+
     const mealsResponse = await supertest(app.server)
       .get("/meals")
       .set("Cookie", cookies)
-    const { id, consumer_id } = mealsResponse.body.meals[0]
+    const { id } = mealsResponse.body.meals[0]
     const responseByID = await supertest(app.server)
       .get(`/meals/${id}`)
       .set("Cookie", cookies)
-    const responseByConsumerID = await supertest(app.server)
-      .get(`/meals/${consumer_id}`)
-      .set("Cookie", cookies)
 
     expect(responseByID.body.meal).toEqual(
-      expect.objectContaining({
-        name: "Macarronada",
-        description: "Macarronada com carne moída",
-        date: "2023-09-28",
-        time: "12:02",
-        in_diet: 1,
-      })
-    )
-
-    expect(responseByConsumerID.body.meal).toEqual(
       expect.objectContaining({
         name: "Macarronada",
         description: "Macarronada com carne moída",

@@ -1,5 +1,5 @@
 import { TUsersRepository } from "@/repositories/users-repository"
-import { UsersNotFoundError } from "./errors/users-not-found"
+import { UsersNotFoundError } from "../errors"
 
 export class FetchUsersService {
   constructor(private usersRepository: TUsersRepository) {}

@@ -1,7 +1,7 @@
+import { FastifyReply, FastifyRequest } from "fastify"
 import { KnexUsersRepository } from "@/repositories/knex/knex-users-repository"
-import { UserNotFoundError } from "@/services/users/errors/user-not-found"
 import { FetchUserService } from "@/services/users/fetch-user-service"
-import type { FastifyReply, FastifyRequest } from "fastify"
+import { UserNotFoundError } from "@/services/errors"
 import { z } from "zod"
 
 export async function fetchUser(req: FastifyRequest, res: FastifyReply) {
