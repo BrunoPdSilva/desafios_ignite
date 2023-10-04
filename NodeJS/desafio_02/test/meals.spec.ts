@@ -122,4 +122,37 @@ describe("Meals route", () => {
       .set("Cookie", cookies)
       .expect(204)
   })
+
+  it("5. Should be able to update a meal.", async () => {
+    const createResponse = await supertest(app.server)
+      .post("/meals")
+      .send({
+        id: randomUUID(),
+        consumer_id: randomUUID(),
+        consumer_session_id: randomUUID(),
+        name: "Macarronada",
+        description: "Macarronada com carne moída",
+        date: "2023-09-28",
+        time: "12:02",
+        in_diet: true,
+      })
+      .expect(201)
+
+    const cookies = createResponse.get("Set-Cookie")
+
+    const mealsResponse = await supertest(app.server)
+      .get("/meals")
+      .set("Cookie", cookies)
+      .expect(200)
+
+    const { id } = mealsResponse.body.meals[0]
+
+    await supertest(app.server)
+      .put(`/meals/${id}`)
+      .send({
+        name: "PASTEL DE FEIRA",
+        in_diet: true,
+      })
+      .expect(204)
+  })
 })
