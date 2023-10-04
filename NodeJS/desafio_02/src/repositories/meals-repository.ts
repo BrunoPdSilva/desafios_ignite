@@ -14,5 +14,6 @@ export type TMealsRepository = {
   fetchMealsByUserID(id: string, sessionID: string): Promise<Meal[] | null>
   fetchMealsBySessionID(id: string): Promise<Meal[] | null>
   registerMeal(data: Meal): Promise<void>
+  updateMeal(id: string, data: Partial<Meal>): Promise<number>
   deleteMeal(id: string): Promise<void>
 }

@@ -24,6 +24,11 @@ export class KnexMealsRepository implements TMealsRepository {
     return meals.length > 0 ? meals : null
   }
 
+  async updateMeal(id: string, data: Partial<Meal>) {
+    const updatedRows = await knex("meals").where("id", id).update(data)
+    return updatedRows
+  }
+
   async deleteMeal(id: string) {
     await knex("meals").where("id", id).del()
   }

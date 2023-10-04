@@ -27,3 +27,9 @@ export class MealsNotFoundError extends Error {
     super("Nenhuma refeição registrada com esse ID.")
   }
 }
+
+export class MealNotUpdated extends Error {
+  constructor() {
+    super("Nenhuma refeição atualizada.")
+  }
+}
